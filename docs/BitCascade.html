@@ -7,113 +7,113 @@
 
 <h1>BitCascade: Sistema de descarga de ficheros P2P</h1>
 
-Se trata de un proyecto práctico de desarrollo <B>en grupos de 2 personas</B>
-cuyo plazo de entrega termina el <B>12 de junio</B>. Tenga en cuenta que si completa esta práctica puede obtener hasta una calificación de 12 puntos (se podría decir que incluye una parte extra).
+Se trata de un proyecto practico de desarrollo <B>en grupos de 2 personas</B>
+cuyo plazo de entrega termina el <B>12 de junio</B>. Tenga en cuenta que si completa esta practica puede obtener hasta una calificacion de 12 puntos (se podria decir que incluye una parte extra).
 <p>
 
-<H2>Objetivo de la práctica</H2>
-La práctica consiste en desarrollar un sistema de descarga de ficheros de gran volumen de forma simultánea por un número considerable de usuarios utilizando un esquema de tipo P2P. Salvando las distancias, se trata de una funcionalidad similar a la de BitTorrent, aunque muy simplificada, y de ahí el nombre del proyecto: BitCascade.
+<H2>Objetivo de la practica</H2>
+La practica consiste en desarrollar un sistema de descarga de ficheros de gran volumen de forma simultanea por un numero considerable de usuarios utilizando un esquema de tipo P2P. Salvando las distancias, se trata de una funcionalidad similar a la de BitTorrent, aunque muy simplificada, y de ahi el nombre del proyecto: BitCascade.
 <P>
-En cuanto a la tecnología de comunicación usada en la práctica,
-se ha elegido Java RMI (si no está familiarizado
-con el uso de esta tecnología puede consultar esta <a href="javaRMI.html">
-guía sobre la programación en Java RMI</a>). Para desarrollar esta práctica
-en un equipo solo se requiere tener instalado Java. Para desarrollar esta práctica en un equipo solo se requiere tener instalado Java.
+En cuanto a la tecnologia de comunicacion usada en la practica,
+se ha elegido Java RMI (si no esta familiarizado
+con el uso de esta tecnologia puede consultar esta <a href="javaRMI.html">
+guia sobre la programacion en Java RMI</a>). Para desarrollar esta practica
+en un equipo solo se requiere tener instalado Java. Para desarrollar esta practica en un equipo solo se requiere tener instalado Java.
 
 <p>
 Para afrontar el trabajo de manera progresiva,
-se propone un desarrollo incremental en cuatro fases, que, además,
-están descompuestas en una serie de pasos.  Por cada
-fase, se indicará qué funcionalidad desarrollar como parte de la misma
-y qué pruebas concretas realizar para verificar el comportamiento
-correcto del código desarrollado.
+se propone un desarrollo incremental en cuatro fases, que, ademas,
+estan descompuestas en una serie de pasos.  Por cada
+fase, se indicara que funcionalidad desarrollar como parte de la misma
+y que pruebas concretas realizar para verificar el comportamiento
+correcto del codigo desarrollado.
 
 <H2>Arquitectura del sistema</H2>
-Aunque BitTorrent ha sido estudiado en detalle en la asignatura, en esta sección se realiza un breve recordatorio de la funcionalidad
+Aunque BitTorrent ha sido estudiado en detalle en la asignatura, en esta seccion se realiza un breve recordatorio de la funcionalidad
 de este sistema identificando, en primer lugar, los tres tipos de nodos presentes en el mismo:
 <ul>
-<li>El nodo que hace público un fichero para su descarga: <tt>Seed</tt> o <tt>Publisher</tt>.
-<li>Los nodos que descargan un fichero: <tt>Leeches</tt> o <tt>Downloaders</tt>. Colaborarán entre ellos para agilizar la descarga de un fichero usando una estrategia P2P: un <tt>leech</tt> descargará los bloques de un fichero tanto del <tt>seed</tt> que lo publicó como de otros <tt>leeches</tt>.
-<li>El <tt>tracker</tt>, que almacena la metainformación asociada a los ficheros que se están descargando. Por cada fichero, entre otros datos como el nombre del fichero, su tamaño y el tamaño del bloque (en terminología de BitTorrent se usa el término <q>pieza</q> y habitualmente se utilizan tamaños entre 32KiB y 16 MiB), guarda el punto de contacto con su <tt>seed</tt> y con los <tt>leeches</tt> que lo están descargando.
+<li>El nodo que hace publico un fichero para su descarga: <tt>Seed</tt> o <tt>Publisher</tt>.
+<li>Los nodos que descargan un fichero: <tt>Leeches</tt> o <tt>Downloaders</tt>. Colaboraran entre ellos para agilizar la descarga de un fichero usando una estrategia P2P: un <tt>leech</tt> descargara los bloques de un fichero tanto del <tt>seed</tt> que lo publico como de otros <tt>leeches</tt>.
+<li>El <tt>tracker</tt>, que almacena la metainformacion asociada a los ficheros que se estan descargando. Por cada fichero, entre otros datos como el nombre del fichero, su tamanho y el tamanho del bloque (en terminologia de BitTorrent se usa el termino <q>pieza</q> y habitualmente se utilizan tamanhos entre 32KiB y 16 MiB), guarda el punto de contacto con su <tt>seed</tt> y con los <tt>leeches</tt> que lo estan descargando.
 </ul>
-A continuación, se repasa someramente su modo de operación:
+A continuacion, se repasa someramente su modo de operacion:
 <ul>
-<li>El <tt>publisher</tt> contacta con el <tt>tracker</tt> proporcionándole la
-metainformación del fichero, que incluye sus datos de contacto.
-<li>El <tt>downloader</tt> contacta con el <tt>tracker</tt> solicitándole la metainformación del fichero que pretende descargar. Además, informa al <tt>tracker</tt> de cuál es su información de contacto. Por tanto, en la metainformación del fichero se incluye cómo contactar con el <tt>publisher</tt> y con <tt>downloaders</tt> que están en proceso de descarga del fichero.
-<li>Un <tt>downloader</tt> usa la metainformación del fichero recibida del <tt>tracker</tt> para descargar bloques tanto del <tt>publisher</tt> como de otros <tt>downloaders</tt> previos.
+<li>El <tt>publisher</tt> contacta con el <tt>tracker</tt> proporcionandole la
+metainformacion del fichero, que incluye sus datos de contacto.
+<li>El <tt>downloader</tt> contacta con el <tt>tracker</tt> solicitandole la metainformacion del fichero que pretende descargar. Ademas, informa al <tt>tracker</tt> de cual es su informacion de contacto. Por tanto, en la metainformacion del fichero se incluye como contactar con el <tt>publisher</tt> y con <tt>downloaders</tt> que estan en proceso de descarga del fichero.
+<li>Un <tt>downloader</tt> usa la metainformacion del fichero recibida del <tt>tracker</tt> para descargar bloques tanto del <tt>publisher</tt> como de otros <tt>downloaders</tt> previos.
 </ul>
 
-<H2>Organización del software del sistema</H2>
+<H2>Organizacion del software del sistema</H2>
 Antes de pasar a presentar cada una de las fases, se especifica en esta
-sección qué distintos componentes hay en este sistema.
+seccion que distintos componentes hay en este sistema.
 En primer lugar, hay que resaltar que
-la práctica está diseñada para no permitir
-la definición de nuevas clases, estando todas ya presentes, aunque
-prácticamente vacías en la mayoría de los casos, en el material de apoyo.
-El software de la práctica está organizado en tres directorios, de forma similar a los ejemplos de la guía:
+la practica esta disenhada para no permitir
+la definicion de nuevas clases, estando todas ya presentes, aunque
+practicamente vacias en la mayoria de los casos, en el material de apoyo.
+El software de la practica esta organizado en tres directorios, de forma similar a los ejemplos de la guia:
 <ul>
-<li><tt>common</tt> (paquete <tt>interfaces</tt>): donde están definidas todas la interfaces del sistema, que ya están completamente programadas y no se deben modificar:
+<li><tt>common</tt> (paquete <tt>interfaces</tt>): donde estan definidas todas la interfaces del sistema, que ya estan completamente programadas y no se deben modificar:
 <ul>
 <li><tt>Tracker.java</tt>: la interfaz del <tt>tracker</tt>.
 <li><tt>Seed.java</tt>: la interfaz del <tt>publisher</tt>.
 <li><tt>Leech.java</tt>: la interfaz de un <tt>downloader</tt>.
-<li><tt>FileInfo.java</tt>: la clase que se usa en la interacción entre el <tt>tracker</tt> y los <tt>downloaders</tt> que contiene la información asociada a un fichero. 
+<li><tt>FileInfo.java</tt>: la clase que se usa en la interaccion entre el <tt>tracker</tt> y los <tt>downloaders</tt> que contiene la informacion asociada a un fichero. 
 </ul>
-Al compilar los ficheros contenidos en este directorio se genera un JAR (<tt>common.jar</tt>) con la funcionalidad requerida por todos los nodos del sistema, existiendo un enlace simbólico en los otros dos directorios que se describen a continuación para tener acceso al mismo.
+Al compilar los ficheros contenidos en este directorio se genera un JAR (<tt>common.jar</tt>) con la funcionalidad requerida por todos los nodos del sistema, existiendo un enlace simbolico en los otros dos directorios que se describen a continuacion para tener acceso al mismo.
 <li><tt>tracker_node</tt> (paquete <tt>tracker</tt>): contiene la funcionalidad del <tt>tracker</tt> en el fichero <tt>TrackerSrv.java</tt>.
 <li><tt>peer_node</tt> (paquete <tt>peers</tt>): contiene tres clases:
 <ul>
-<li><tt>Publisher.java</tt>: la implementación del <tt>publisher</tt>.
-<li><tt>DownloaderImpl.java</tt>: la implementación del <tt>downloader</tt>.
+<li><tt>Publisher.java</tt>: la implementacion del <tt>publisher</tt>.
+<li><tt>DownloaderImpl.java</tt>: la implementacion del <tt>downloader</tt>.
 <li><tt>Downloader.java</tt>: programa que usa los servicios de <tt>DownloaderImpl</tt> para descargarse un fichero. Se trata de un programa para hacer pruebas que no es necesario modificar.
 </ul>
 </ul>
-Recapitulando, solo es necesario modificar tres clases durante el desarrollo de la práctica: <tt>TrackerSrv.java</tt>, <tt>Publisher.java</tt> y <tt>DownloaderImpl.java</tt>.
-Además de las diversas clases, en los distintos directorios se incluyen
-<i>scripts</i> para facilitar la compilación de las clases y la ejecución
+Recapitulando, solo es necesario modificar tres clases durante el desarrollo de la practica: <tt>TrackerSrv.java</tt>, <tt>Publisher.java</tt> y <tt>DownloaderImpl.java</tt>.
+Ademas de las diversas clases, en los distintos directorios se incluyen
+<i>scripts</i> para facilitar la compilacion de las clases y la ejecucion
 de los programas.
 <p>
-Para facilitar el desarrollo de la práctica, se proporciona también como material de apoyo los dos primeros ejemplos de la guía de Java RMI y un ejemplo de acceso a un fichero usando la clase <tt>RandomAccessFile</tt> de Java.
+Para facilitar el desarrollo de la practica, se proporciona tambien como material de apoyo los dos primeros ejemplos de la guia de Java RMI y un ejemplo de acceso a un fichero usando la clase <tt>RandomAccessFile</tt> de Java.
 
-<h2>Ejecución de la práctica</h2>
-Aunque para toda la gestión del ciclo de desarrollo del código de la práctica se puede usar el IDE que se considere oportuno, para aquellos que prefieran no utilizar una herramienta de este tipo, se proporcionan una serie de scripts que permiten realizar toda la labor requerida. En esta sección, se explica cómo trabajar con estos scripts.
+<h2>Ejecucion de la practica</h2>
+Aunque para toda la gestion del ciclo de desarrollo del codigo de la practica se puede usar el IDE que se considere oportuno, para aquellos que prefieran no utilizar una herramienta de este tipo, se proporcionan una serie de scripts que permiten realizar toda la labor requerida. En esta seccion, se explica como trabajar con estos scripts.
 <p>
-Como primer paso, se debería descargar y desempaquetar el código de la práctica:
+Como primer paso, se deberia descargar y desempaquetar el codigo de la practica:
 <pre>
 wget https://laurel.datsi.fi.upm.es/~ssoo/SD.dir/practicas/BitCascade.tgz
 tar xvf BitCascade.tgz
 cd DATSI/SD/BitCascade.2023
 </pre>
-Para compilar la práctica, existe un script denominado <tt>./compile.sh</tt> en cada uno de los 3 directorios de la práctica. También se dispone del script <tt>./compile_all.sh</tt> en el directorio raíz de la práctica que va invocando los <i>scripts</i> de compilación de cada directorio.
+Para compilar la practica, existe un script denominado <tt>./compile.sh</tt> en cada uno de los 3 directorios de la practica. Tambien se dispone del script <tt>./compile_all.sh</tt> en el directorio raiz de la practica que va invocando los <i>scripts</i> de compilacion de cada directorio.
 <p>
-En cuanto a la ejecución, se plantea un ejemplo con tres nodos, suponiendo que se ejecutan en la misma máquina (se pueden usar los distintos nodos de <tt>triqui</tt> para hacer una prueba en distintas máquinas: <tt>triqui1.fi.upm.es</tt>, <tt>triqui2.fi.upm.es</tt>, <tt>triqui3.fi.upm.es</tt> y <tt>triqui4.fi.upm.es</tt>). En primer lugar, arrancamos el <tt>registry</tt> y el <tt>tracker</tt>:
+En cuanto a la ejecucion, se plantea un ejemplo con tres nodos, suponiendo que se ejecutan en la misma maquina (se pueden usar los distintos nodos de <tt>triqui</tt> para hacer una prueba en distintas maquinas: <tt>triqui1.fi.upm.es</tt>, <tt>triqui2.fi.upm.es</tt>, <tt>triqui3.fi.upm.es</tt> y <tt>triqui4.fi.upm.es</tt>). En primer lugar, arrancamos el <tt>registry</tt> y el <tt>tracker</tt>:
 <pre>
 cd tracker_node
 ./start_rmiregistry 23456 &amp;
 ./execute_tracker.sh 23456 mi_tracker # nombre del tracker para depurar
 </pre>
-A continuación, arrancamos el <tt>publisher</tt> especificando un nombre que, por convenio, corresponderá a un subdirectorio de <tt>peer_node/bin</tt> donde está almacenado el fichero que se quiere publicar:
+A continuacion, arrancamos el <tt>publisher</tt> especificando un nombre que, por convenio, correspondera a un subdirectorio de <tt>peer_node/bin</tt> donde esta almacenado el fichero que se quiere publicar:
 <pre>
 cd peer_node
 mkdir bin/mi_publisher
 cp /etc/passwd bin/mi_publisher/Fichero # fichero publicado
-./execute_publisher.sh localhost 23456 mi_publisher Fichero 512 # en un sistema real el tamaño de cada bloque sería mucho mayor (alrededor del megabyte).
+./execute_publisher.sh localhost 23456 mi_publisher Fichero 512 # en un sistema real el tamanho de cada bloque seria mucho mayor (alrededor del megabyte).
 </pre>
-Por último, ejecutamos un <tt>downloader</tt> especificando un nombre que, por convenio, corresponderá a un subdirectorio de <tt>peer_node/bin</tt> donde quedará almacenado el fichero que se quiere publicar (no hay que crear el directorio ya que lo hace el propio <tt>downloader</tt>):
+Por ultimo, ejecutamos un <tt>downloader</tt> especificando un nombre que, por convenio, correspondera a un subdirectorio de <tt>peer_node/bin</tt> donde quedara almacenado el fichero que se quiere publicar (no hay que crear el directorio ya que lo hace el propio <tt>downloader</tt>):
 <pre>
 cd peer_node
 ./execute_downloader.sh localhost 23456 down1 Fichero
 # en peer_node/bin/down1/Fichero debe quedar una copia del fichero
 </pre>
-Se podrían ir activando más <tt>downloaders</tt> especificando diferentes nombres.
-<h2>Fase 1: Interacción con el Tracker (3 puntos)</h2>
-Durante esta fase el <tt>publisher</tt> publica la información de un fichero en el <tt>tracker</tt> y un <tt>downloader</tt> obtiene esa información encapsulada en la clase <tt>FileInfo</tt>. Las distintas operaciones que hay que realizar en esta fase están etiquetadas con <tt>TODO 1</tt> en los ficheros correspondientes.
-<p>Para realizar esta funcionalidad puede tomar como base el cliente y el servidor del servicio de eco explicado en la guía, que se incluye también en el material de apoyo.
+Se podrian ir activando mas <tt>downloaders</tt> especificando diferentes nombres.
+<h2>Fase 1: Interaccion con el Tracker (3 puntos)</h2>
+Durante esta fase el <tt>publisher</tt> publica la informacion de un fichero en el <tt>tracker</tt> y un <tt>downloader</tt> obtiene esa informacion encapsulada en la clase <tt>FileInfo</tt>. Las distintas operaciones que hay que realizar en esta fase estan etiquetadas con <tt>TODO 1</tt> en los ficheros correspondientes.
+<p>Para realizar esta funcionalidad puede tomar como base el cliente y el servidor del servicio de eco explicado en la guia, que se incluye tambien en el material de apoyo.
 <h3>Paso 1: Alta del <tt>tracker</tt> en el <tt>registry</tt></h3>
-En este primer paso de esta fase, el <tt>tracker</tt>, en su función <tt>main</tt>, debe localizar el <tt>registry</tt>, cuyo puerto ha recibido como argumento junto con su propio nombre que se usa para depuración, y dar de alta en el <tt>registry</tt> una instancia de esa misma clase (<tt>TrackerSrv</tt>) que ya se ha creado previamente.
+En este primer paso de esta fase, el <tt>tracker</tt>, en su funcion <tt>main</tt>, debe localizar el <tt>registry</tt>, cuyo puerto ha recibido como argumento junto con su propio nombre que se usa para depuracion, y dar de alta en el <tt>registry</tt> una instancia de esa misma clase (<tt>TrackerSrv</tt>) que ya se ha creado previamente.
 <p>
-Para comprobar que la funcionalidad es correcta, debe incorporar en <tt>Publisher.java</tt> la operación de <tt>lookup</tt> del <tt>registry</tt> que debe obtener correctamente la referencia al <tt>tracker</tt> lo que se validará porque se imprime el nombre del <tt>tracker</tt>.
+Para comprobar que la funcionalidad es correcta, debe incorporar en <tt>Publisher.java</tt> la operacion de <tt>lookup</tt> del <tt>registry</tt> que debe obtener correctamente la referencia al <tt>tracker</tt> lo que se validara porque se imprime el nombre del <tt>tracker</tt>.
 <h4>Pruebas</h4>
 Arrancamos el <tt>tracker</tt>:
 <pre>
@@ -121,17 +121,17 @@ cd tracker_node
 ./start_rmiregistry 23456 &amp;
 ./execute_tracker.sh 23456 mi_tracker # nombre del tracker para depurar
 </pre>
-Y el <tt>publisher</tt> que realmente no está publicando nada todavía sino verificando que se ha dado de alta bien el <tt>tracker</tt> (el error de fichero ya publicado aparece porque no está completada la funcionalidad):
+Y el <tt>publisher</tt> que realmente no esta publicando nada todavia sino verificando que se ha dado de alta bien el <tt>tracker</tt> (el error de fichero ya publicado aparece porque no esta completada la funcionalidad):
 <pre>
 ./execute_publisher.sh localhost 23456 mi_publisher cualquier_cosa 512 
 el nombre del nodo del tracker es: mi_tracker
 Fichero ya publicado
 </pre>
 
-<h3>Paso 2: Publicación en el <tt>tracker</tt> de un fichero por un <tt>Seed</tt></h3>
-En este paso, hay que implementar en el <tt>tracker</tt> el método <tt>announceFile</tt> que permite a un <tt>publisher</tt> realizar la publicación de un fichero. Este método debe crear un objeto de la clase <tt>FileInfo</tt> con todos los datos del fichero e insertarlo en una estructura de tipo mapa que debe gestionar el <tt>tracker</tt>, devolviendo un error si el fichero ya estaba publicado.
+<h3>Paso 2: Publicacion en el <tt>tracker</tt> de un fichero por un <tt>Seed</tt></h3>
+En este paso, hay que implementar en el <tt>tracker</tt> el metodo <tt>announceFile</tt> que permite a un <tt>publisher</tt> realizar la publicacion de un fichero. Este metodo debe crear un objeto de la clase <tt>FileInfo</tt> con todos los datos del fichero e insertarlo en una estructura de tipo mapa que debe gestionar el <tt>tracker</tt>, devolviendo un error si el fichero ya estaba publicado.
 <p>
-Por otro lado, en el <tt>publisher</tt> debe instanciarse un objeto de la clase <tt>Publisher</tt>, cuyo constructor ya realiza varias operaciones como obtener el número de bloques que ocupa el fichero que deja disponible en el método <tt>getNumBlocks</tt>, e invocar al método <tt>announceFile</tt> del <tt>tracker</tt>.
+Por otro lado, en el <tt>publisher</tt> debe instanciarse un objeto de la clase <tt>Publisher</tt>, cuyo constructor ya realiza varias operaciones como obtener el numero de bloques que ocupa el fichero que deja disponible en el metodo <tt>getNumBlocks</tt>, e invocar al metodo <tt>announceFile</tt> del <tt>tracker</tt>.
 <h4>Pruebas</h4>
 Creamos el fichero a exportar:
 <pre>
@@ -152,7 +152,7 @@ cd peer_node
 el nombre del nodo del tracker es: mi_tracker
 Dando servicio...
 </pre>
-Compruebe además que si se arranca un segundo <tt>publisher</tt> en otra ventana sale el mensaje indicando que el fichero ya está publicado:
+Compruebe ademas que si se arranca un segundo <tt>publisher</tt> en otra ventana sale el mensaje indicando que el fichero ya esta publicado:
 <pre>
 cd peer_node
 ./execute_publisher.sh localhost 23456 mi_publisher2 Fichero 512 
@@ -160,11 +160,11 @@ el nombre del nodo del tracker es: mi_tracker
 Fichero ya publicado
 </pre>
 
-<h3>Paso 3: Obtención de la información de un fichero por un <tt>Leech</tt></h3>
-Hay que implementar el método <tt>lookupFile</tt> del <tt>tracker</tt> que obtiene del mapa la información asociada a un fichero.
+<h3>Paso 3: Obtencion de la informacion de un fichero por un <tt>Leech</tt></h3>
+Hay que implementar el metodo <tt>lookupFile</tt> del <tt>tracker</tt> que obtiene del mapa la informacion asociada a un fichero.
 <p>
-En el método <tt>init</tt> de <tt>DownloaderImpl</tt>, como ya hicimos en el <tt>publisher</tt>, hay que realizar la operación de <tt>lookup</tt> del <tt>registry</tt> que debe obtener correctamente la referencia al <tt>tracker</tt> lo que se validará porque se imprime el nombre del <tt>tracker</tt>.
-<p>Asimismo, hay que llamar al método <tt>lookupFile</tt> para obtener la metainformación del fichero e instanciar un objeto de la clase <tt>DownloaderImpl</tt>.
+En el metodo <tt>init</tt> de <tt>DownloaderImpl</tt>, como ya hicimos en el <tt>publisher</tt>, hay que realizar la operacion de <tt>lookup</tt> del <tt>registry</tt> que debe obtener correctamente la referencia al <tt>tracker</tt> lo que se validara porque se imprime el nombre del <tt>tracker</tt>.
+<p>Asimismo, hay que llamar al metodo <tt>lookupFile</tt> para obtener la metainformacion del fichero e instanciar un objeto de la clase <tt>DownloaderImpl</tt>.
 
 <h4>Pruebas</h4>
 Arrancamos el <tt>tracker</tt> y el <tt>publisher</tt> en dos ventanas diferentes debiendo aparecer las respectivas salidas que se muestran:
@@ -180,17 +180,17 @@ cd peer_node
 el nombre del nodo del tracker es: mi_tracker
 Dando servicio...
 </pre>
-A continuación, ejecutamos un <tt>downloader</tt> que debe imprimir
-la información del fichero:
+A continuacion, ejecutamos un <tt>downloader</tt> que debe imprimir
+la informacion del fichero:
 <pre>
 cd peer_node
 ./execute_downloader.sh localhost 23456 mi_downloader Fichero
 el nombre del nodo del tracker es: mi_tracker
-	tamaño de bloque: 512
-	número de bloques: 6
+	tamanho de bloque: 512
+	numero de bloques: 6
 	Seed: mi_publisher
 </pre>
-Pruebe además a arrancar un segundo <tt>downloader</tt> en otra ventana con un fichero no publicado.
+Pruebe ademas a arrancar un segundo <tt>downloader</tt> en otra ventana con un fichero no publicado.
 <pre>
 ./execute_downloader.sh localhost 23456 mi_downloader2 Fichero_noexiste
 el nombre del nodo del tracker es: mi_tracker
@@ -201,8 +201,8 @@ Fichero no publicado
 Esta fase realiza la descarga de un fichero desde un <tt>seed</tt> a un
 <tt>leech</tt>:
 <ul>
-<li>En el <tt>publisher</tt> hay que implementar el método remoto <tt>read</tt> que lee usando un <tt>RandomAccessFile</tt> el bloque solicitado de un fichero y lo retorna como resultado del método. El fichero se debe abrir para lectura en el constructor de la clase. Nótese que normalmente el fichero no ocupará un número entero de bloques por lo que habrá que asegurarse de que la última lectura solo devuelve los datos realmente leídos. Téngase en cuenta que el descriptor de un fichero no es serializable por lo que habrá que definirlo con el calificativo <tt>transient</tt> para indicar que ese campo no se debe intentar serializar.
-<li>En el método <tt>downloadBlock</tt> de <tt>DownloaderImpl</tt> hay que solicitar el bloque al <tt>seed</tt> y escribirlo en el fichero. El fichero se debe abrir para escritura en el constructor de la clase vaciando su contenido por si existiera previamente (<tt>setLength(0)</tt>).
+<li>En el <tt>publisher</tt> hay que implementar el metodo remoto <tt>read</tt> que lee usando un <tt>RandomAccessFile</tt> el bloque solicitado de un fichero y lo retorna como resultado del metodo. El fichero se debe abrir para lectura en el constructor de la clase. Notese que normalmente el fichero no ocupara un numero entero de bloques por lo que habra que asegurarse de que la ultima lectura solo devuelve los datos realmente leidos. Tengase en cuenta que el descriptor de un fichero no es serializable por lo que habra que definirlo con el calificativo <tt>transient</tt> para indicar que ese campo no se debe intentar serializar.
+<li>En el metodo <tt>downloadBlock</tt> de <tt>DownloaderImpl</tt> hay que solicitar el bloque al <tt>seed</tt> y escribirlo en el fichero. El fichero se debe abrir para escritura en el constructor de la clase vaciando su contenido por si existiera previamente (<tt>setLength(0)</tt>).
 </ul>
 Se proporciona como material de apoyo para esta parte un ejemplo de lectura de un bloque de un fichero.
 
@@ -230,8 +230,8 @@ publisher read 5
 cd peer_node
 ./execute_downloader.sh localhost 23456 mi_downloader Fichero
 el nombre del nodo del tracker es: mi_tracker
-	tamaño de bloque: 512
-	número de bloques: 6
+	tamanho de bloque: 512
+	numero de bloques: 6
 	Seed: mi_publisher
 Pulse return para leer el siguiente bloque 
 Pulse return para leer el siguiente bloque 
@@ -246,15 +246,15 @@ Se debe comprobar que la descarga ha sido correcta:
 diff bin/mi_publisher/Fichero bin/mi_downloader/Fichero
 </pre>
 
-<h2>Fase 3: Descarga del fichero de Leeches y del Seed usando información estática (3 puntos)</h2>
-En esta fase, un <tt>downloader</tt> irá descargando alternativamente bloques del fichero desde los <tt>leeches</tt> previos y desde el <tt>seed</tt>. Suponiendo tres <tt>leeches</tt>, descargará del primero, después del segundo, continuando por el tercero, seguido del <tt>seed</tt>, y otra vez del primer <tt>leech</tt>. Por tanto, el <tt>downloader</tt> ejerce también el papel de servidor teniendo que convertirlo en un objeto remoto. Téngase en cuenta que en esta fase la estrategia usada presenta bastantes limitaciones porque vamos a descargar de los <tt>leeches</tt> previos solo los bloques que sabemos que estos ya han descargado en el momento que se activa este <tt>leech</tt>. La siguiente fase supera estas limitaciones.
+<h2>Fase 3: Descarga del fichero de Leeches y del Seed usando informacion estatica (3 puntos)</h2>
+En esta fase, un <tt>downloader</tt> ira descargando alternativamente bloques del fichero desde los <tt>leeches</tt> previos y desde el <tt>seed</tt>. Suponiendo tres <tt>leeches</tt>, descargara del primero, despues del segundo, continuando por el tercero, seguido del <tt>seed</tt>, y otra vez del primer <tt>leech</tt>. Por tanto, el <tt>downloader</tt> ejerce tambien el papel de servidor teniendo que convertirlo en un objeto remoto. Tengase en cuenta que en esta fase la estrategia usada presenta bastantes limitaciones porque vamos a descargar de los <tt>leeches</tt> previos solo los bloques que sabemos que estos ya han descargado en el momento que se activa este <tt>leech</tt>. La siguiente fase supera estas limitaciones.
 
-<h3>Paso 1: Convertir Downloader en objeto remoto y añadirlo a FileInfo</h3>
-El primer paso es cambiar la definición de esta clase para que sea de tipo remota.
+<h3>Paso 1: Convertir Downloader en objeto remoto y anhadirlo a FileInfo</h3>
+El primer paso es cambiar la definicion de esta clase para que sea de tipo remota.
 <p>
-Asimismo, en el método <tt>init</tt> de <tt>DownloaderImpl</tt> se debe invocar el método <tt>addLeech</tt> del <tt>tracker</tt>, que hay que implementar en esta fase.
+Asimismo, en el metodo <tt>init</tt> de <tt>DownloaderImpl</tt> se debe invocar el metodo <tt>addLeech</tt> del <tt>tracker</tt>, que hay que implementar en esta fase.
 <h4>Pruebas</h4>
-Arrancamos el <tt>tracker</tt>, el <tt>publisher</tt> y dos <tt>downloader</tt> en cuatro ventanas diferentes debiendo aparecer las respectivas salidas que se muestran a continuación donde se puede apreciar que en el <tt>FileInfo</tt> del segundo <tt>downloader</tt> ya aparece el primer <tt>downloader</tt> (nótese que en esta prueba no vamos a solicitar descargar bloques):
+Arrancamos el <tt>tracker</tt>, el <tt>publisher</tt> y dos <tt>downloader</tt> en cuatro ventanas diferentes debiendo aparecer las respectivas salidas que se muestran a continuacion donde se puede apreciar que en el <tt>FileInfo</tt> del segundo <tt>downloader</tt> ya aparece el primer <tt>downloader</tt> (notese que en esta prueba no vamos a solicitar descargar bloques):
 <pre>
 cd tracker_node
 ./start_rmiregistry 23456 &amp;
@@ -271,8 +271,8 @@ Dando servicio...
 cd peer_node
 ./execute_downloader.sh localhost 23456 mi_downloader Fichero
 el nombre del nodo del tracker es: mi_tracker
-	tamaño de bloque: 512
-	número de bloques: 6
+	tamanho de bloque: 512
+	numero de bloques: 6
 	Seed: mi_publisher
 Pulse return para leer el siguiente bloque 
 </pre>
@@ -280,33 +280,33 @@ Pulse return para leer el siguiente bloque
 cd peer_node
 ./execute_downloader.sh localhost 23456 mi_downloader2 Fichero
 el nombre del nodo del tracker es: mi_tracker
-	tamaño de bloque: 512
-	número de bloques: 6
+	tamanho de bloque: 512
+	numero de bloques: 6
 	Seed: mi_publisher
 	Leech: mi_downloader
 Pulse return para leer el siguiente bloque
 </pre>
 <h3>Paso 2: Descarga de bloques de nodos alternos</h3>
-En primer lugar, hay que implementar el método <tt>read</tt> de
-<tt>DownloaderImpl</tt>, que será básicamente igual que el de
+En primer lugar, hay que implementar el metodo <tt>read</tt> de
+<tt>DownloaderImpl</tt>, que sera basicamente igual que el de
 <tt>Publisher</tt>.
 <p>
-Para poder descargar de distintos nodos se requiere conocer cuál es el último bloque descargado por los
+Para poder descargar de distintos nodos se requiere conocer cual es el ultimo bloque descargado por los
 <tt>downloaders</tt> previos en el momento en el que se activa este
 <tt>downloader</tt>. Se recomienda usar un <tt>ArrayList</tt> para almacenar
 objetos de la clase <tt>LeechInfo</tt> correspondientes a esos <tt>downloaders</tt> previos.
 <p>
 En este paso, en el constructor de <tt>DownloaderImpl</tt> se debe rellenar esa lista llamando a <tt>getLastBlockNumber</tt> por cada <tt>leech</tt> contenido en <tt>FileInfo</tt>.
 <p>
-En <tt>downloadBlock</tt>, hay que seleccionar de qué <i>peer</i> se realiza la descarga usando la siguiente estrategia que busca un cierto grado de equidad:
+En <tt>downloadBlock</tt>, hay que seleccionar de que <i>peer</i> se realiza la descarga usando la siguiente estrategia que busca un cierto grado de equidad:
 <ul>
-<li>Se itera en el <tt>ArrayList</tt> buscando el primer <tt>leech</tt> que tenga descargado el bloque solicitado. Se recomienda iterar directamente usando el método <tt>get</tt> con la posición numérica en el <i>array</i>.
-<li>Si hay un <tt>leech</tt> que lo cumple, se descarga de ese nodo. La próxima llamada a este método <tt>downloadBlock</tt> comenzará a iterar justo por el siguiente de la lista.
-<li>En caso de que se alcance el final de la lista se descargará del <tt>seed</tt>.
+<li>Se itera en el <tt>ArrayList</tt> buscando el primer <tt>leech</tt> que tenga descargado el bloque solicitado. Se recomienda iterar directamente usando el metodo <tt>get</tt> con la posicion numerica en el <i>array</i>.
+<li>Si hay un <tt>leech</tt> que lo cumple, se descarga de ese nodo. La proxima llamada a este metodo <tt>downloadBlock</tt> comenzara a iterar justo por el siguiente de la lista.
+<li>En caso de que se alcance el final de la lista se descargara del <tt>seed</tt>.
 </ul>
 
 <h4>Pruebas</h4>
-Arrancamos el mismo escenario que en la prueba anterior pero en este caso con tres <tt>downloaders</tt> y, una vez arrancados el <tt>tracker</tt> y el <tt>publisher</tt>, con la siguiente secuencia de ejecución (recuerde que el fichero de prueba tiene 6 bloques):
+Arrancamos el mismo escenario que en la prueba anterior pero en este caso con tres <tt>downloaders</tt> y, una vez arrancados el <tt>tracker</tt> y el <tt>publisher</tt>, con la siguiente secuencia de ejecucion (recuerde que el fichero de prueba tiene 6 bloques):
 <ul>
 <li>arranca <tt>downloader 1</tt>: por el momento no lee nada.
 <li>arranca <tt>downloader 2</tt>: por el momento no lee nada.
@@ -320,33 +320,33 @@ Arrancamos el mismo escenario que en la prueba anterior pero en este caso con tr
 <li><tt>downloader 3</tt> lee quinto bloque: debe hacerlo de <tt>seed</tt>.
 <li><tt>downloader 3</tt> lee sexto bloque: debe hacerlo de <tt>seed</tt>.
 </ul>
-<h2>Fase 4: Descarga del fichero de Leeches y del Seed usando información dinámica (3 puntos)</h2>
-En esta fase un <tt>downloader</tt> va a ser informado dinámicamente por los <tt>downloaders</tt> previos según estos vayan descargándose nuevos bloques siguiendo este modo de operación:
+<h2>Fase 4: Descarga del fichero de Leeches y del Seed usando informacion dinamica (3 puntos)</h2>
+En esta fase un <tt>downloader</tt> va a ser informado dinamicamente por los <tt>downloaders</tt> previos segun estos vayan descargandose nuevos bloques siguiendo este modo de operacion:
 <ul>
-<li>Como ya ocurría en la fase previa, un nuevo <tt>downloader</tt> contacta con cada uno de los previos, pero no solo para conocer cuál es su último bloque descargado (<tt>getLastBlockNumber</tt>), sino también lo hace (<tt>newLeech</tt>) para solicitar ser notificado cada que se descargue uno nuevo.
-<li>Cuando un <tt>leech</tt> completa una descarga (<tt>downloadBlock</tt>), lo notifica a los <tt>leeches</tt> posteriores mediante <tt>notifyBlock</tt> que actualiza asíncronamente el número del último bloque descargado en la entrada correspondiente del <tt>ArrayList</tt> del <tt>leech</tt> anterior.
+<li>Como ya ocurria en la fase previa, un nuevo <tt>downloader</tt> contacta con cada uno de los previos, pero no solo para conocer cual es su ultimo bloque descargado (<tt>getLastBlockNumber</tt>), sino tambien lo hace (<tt>newLeech</tt>) para solicitar ser notificado cada que se descargue uno nuevo.
+<li>Cuando un <tt>leech</tt> completa una descarga (<tt>downloadBlock</tt>), lo notifica a los <tt>leeches</tt> posteriores mediante <tt>notifyBlock</tt> que actualiza asincronamente el numero del ultimo bloque descargado en la entrada correspondiente del <tt>ArrayList</tt> del <tt>leech</tt> anterior.
 </ul>
 En consecuencia, hacen faltan dos listas:
 <ul>
-<li>Una asociada a los <tt>leeches</tt> anteriores que ya se implementó en la fase previa como un <tt>ArrayList</tt> de objetos de la clase <tt>LeechInfo</tt>. El cambio que se produce en esta fase es que se actualiza asíncronamente mediante el método <tt>notifyBlock</tt> el campo que guarda el último bloque descargado. Para facilitar esa actualización evitando tener que iterar sobre el <tt>ArratList</tt>, se recomienda crear en el constructor un mapa sobre esa lista usando como clave la referencia al <tt>leech</tt>, que, suponiendo que hemos llamado <tt>leechList</tt> al <tt>ArrayList</tt>, se podría hacer con esta línea de código:
+<li>Una asociada a los <tt>leeches</tt> anteriores que ya se implemento en la fase previa como un <tt>ArrayList</tt> de objetos de la clase <tt>LeechInfo</tt>. El cambio que se produce en esta fase es que se actualiza asincronamente mediante el metodo <tt>notifyBlock</tt> el campo que guarda el ultimo bloque descargado. Para facilitar esa actualizacion evitando tener que iterar sobre el <tt>ArratList</tt>, se recomienda crear en el constructor un mapa sobre esa lista usando como clave la referencia al <tt>leech</tt>, que, suponiendo que hemos llamado <tt>leechList</tt> al <tt>ArrayList</tt>, se podria hacer con esta linea de codigo:
 <pre>
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.function.Function;
 leechMap = leechList.stream().collect(Collectors.toMap(LeechInfo::getLeech, Function.identity()));
 </pre>
-Téngase en cuenta que este <tt>ArrayList</tt> se crea en el constructor y ya no se modifica, no presentando problemas de acceso concurrente.
-<li>Una lista adicional de los <tt>leeches</tt> posteriores que serán notificados cada vez que este <tt>leech</tt> complete una descarga (solo haría falta guardar en la lista la referencia a cada <tt>leech</tt>). En el método <tt>newLeech</tt> se añadiría el <tt>leech</tt> invocante a la lista de este <tt>leech</tt>. Por su parte, esa invocación se produciría en el constructor de la clase. Al completar la descarga de un bloque se iteraría sobre esa lista para realizar las notificaciones. En este caso, se trata de una lista dinámica que se actualiza concurrentemente por lo que se recomienda el uso de la clase <tt>ConcurrentLinkedQueue</tt>.
+Tengase en cuenta que este <tt>ArrayList</tt> se crea en el constructor y ya no se modifica, no presentando problemas de acceso concurrente.
+<li>Una lista adicional de los <tt>leeches</tt> posteriores que seran notificados cada vez que este <tt>leech</tt> complete una descarga (solo haria falta guardar en la lista la referencia a cada <tt>leech</tt>). En el metodo <tt>newLeech</tt> se anhadiria el <tt>leech</tt> invocante a la lista de este <tt>leech</tt>. Por su parte, esa invocacion se produciria en el constructor de la clase. Al completar la descarga de un bloque se iteraria sobre esa lista para realizar las notificaciones. En este caso, se trata de una lista dinamica que se actualiza concurrentemente por lo que se recomienda el uso de la clase <tt>ConcurrentLinkedQueue</tt>.
 </ul>
-Recapitulando, en esta fase habría que hacer las siguientes modificaciones en <tt>DownloaderImpl</tt>:
+Recapitulando, en esta fase habria que hacer las siguientes modificaciones en <tt>DownloaderImpl</tt>:
 <ul>
-<li>En el constructor, se debe crear un mapa sobre el <tt>ArrayList</tt> para simplificar el código de <tt>notifyBlock</tt>. Asimismo, hay que llamar al método <tt>newLeech</tt> de los <tt>leeches</tt> previos.
-<li>Al completar la descarga de un bloque (<tt>downloadBlock</tt>) se debe invocar el método <tt>notifyBlock</tt> de todos los <tt>leeches</tt> posteriores.
-<li>En <tt>newLeech</tt> hay que añadir el <tt>leech</tt> a la lista concurrente.
-<li>En <tt>notifyBlock</tt> se debe actualizar el campo correspondiente al último bloque en la entrada correspondiente del <tt>ArrayList</tt>.
+<li>En el constructor, se debe crear un mapa sobre el <tt>ArrayList</tt> para simplificar el codigo de <tt>notifyBlock</tt>. Asimismo, hay que llamar al metodo <tt>newLeech</tt> de los <tt>leeches</tt> previos.
+<li>Al completar la descarga de un bloque (<tt>downloadBlock</tt>) se debe invocar el metodo <tt>notifyBlock</tt> de todos los <tt>leeches</tt> posteriores.
+<li>En <tt>newLeech</tt> hay que anhadir el <tt>leech</tt> a la lista concurrente.
+<li>En <tt>notifyBlock</tt> se debe actualizar el campo correspondiente al ultimo bloque en la entrada correspondiente del <tt>ArrayList</tt>.
 </ul>
 <h4>Pruebas</h4>
-Arrancamos el mismo escenario que en la prueba anterior pero en este caso con dos <tt>downloaders</tt> y, una vez arrancados el <tt>tracker</tt> y el <tt>publisher</tt>, con la siguiente secuencia de ejecución (recuerde que el fichero de prueba tiene 6 bloques):
+Arrancamos el mismo escenario que en la prueba anterior pero en este caso con dos <tt>downloaders</tt> y, una vez arrancados el <tt>tracker</tt> y el <tt>publisher</tt>, con la siguiente secuencia de ejecucion (recuerde que el fichero de prueba tiene 6 bloques):
 <ul>
 <li>arranca <tt>downloader 1</tt> lee primer bloque: debe hacerlo de <tt>seed</tt>.
 <li><tt>downloader 2</tt> lee primer bloque: debe hacerlo de <tt>downloader 1</tt>.
@@ -355,36 +355,36 @@ Arrancamos el mismo escenario que en la prueba anterior pero en este caso con do
 <li><tt>downloader 2</tt>: a partir de este punto lee de forma alternada un bloque de <tt>downloader 1</tt> y otro del <tt>seed</tt>.
 </ul>
 
-<H2>Material de apoyo de la práctica</H2>
-El material de apoyo de la práctica se encuentra en este
+<H2>Material de apoyo de la practica</H2>
+El material de apoyo de la practica se encuentra en este
 <a href="BitCascade.tgz">enlace</a>.
 <p>
-Al descomprimir el material de apoyo se crea el entorno de desarrollo de la práctica, que
+Al descomprimir el material de apoyo se crea el entorno de desarrollo de la practica, que
 reside en el directorio: <TT>$HOME/DATSI/SD/BitCascade.2023/</TT>.
 
-<H2>Entrega de la práctica</H2>
-Se realizará en la máquina <TT>triqui</TT>, usando el mandato:
+<H2>Entrega de la practica</H2>
+Se realizara en la maquina <TT>triqui</TT>, usando el mandato:
 
 <PRE>
 entrega.sd BitCascade.2023
 </PRE>
 
 <P>
-Este mandato recogerá los siguientes ficheros:
+Este mandato recogera los siguientes ficheros:
 
 <UL>
 <LI><TT>autores</TT>
 Fichero con los datos de los autores:
 <PRE>
-DNI APELLIDOS NOMBRE MATRÍCULA
+DNI APELLIDOS NOMBRE MATRiCULA
 </PRE>
 
 <LI><TT>memoria.txt</TT>
-Memoria de la práctica. En ella se pueden comentar los aspectos del
-desarrollo de su práctica que considere más relevantes.
+Memoria de la practica. En ella se pueden comentar los aspectos del
+desarrollo de su practica que considere mas relevantes.
 Asimismo, puede exponer los comentarios personales que considere
 oportuno. No es necesario rellenarla en caso de que no tenga nada que
-reseñar.
+resenhar.
 <LI><TT>tracker_node/src/tracker/TrackerSrv.java</TT>
 <LI><TT>peer_node/src/peers/Publisher.java</TT>
 <LI><TT>peer_node/src/peers/DownloaderImpl.java</TT>

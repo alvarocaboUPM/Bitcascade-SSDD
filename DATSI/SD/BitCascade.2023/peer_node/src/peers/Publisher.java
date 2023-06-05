@@ -35,7 +35,7 @@ public class Publisher extends UnicastRemoteObject implements Seed {
         numBlocks = (int) (new File(path).length() + blockSize - 1)/blockSize;
 
         // TODO 2: abrir el fichero para leer (RandomAccessFile)
-        //raf = new RandomAccessFile(file, "r");
+        raf = new RandomAccessFile(file, "r");
     }
 
     public String getName() throws RemoteException {

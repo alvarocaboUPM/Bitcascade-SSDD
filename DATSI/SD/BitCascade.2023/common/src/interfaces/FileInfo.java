@@ -1,4 +1,4 @@
-// Clase que contiene la información de un fichero
+// Clase que contiene la informacion de un fichero
 // NO MODIFICAR
 
 package interfaces;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 import interfaces.Seed;
 import interfaces.Leech;
 
-// solo por print, que usa los métodos remotos getName
+// solo por print, que usa los metodos remotos getName
 import java.rmi.RemoteException;
 
 public class FileInfo implements Serializable {
@@ -24,7 +24,7 @@ public class FileInfo implements Serializable {
         numBlocks = nBls;
         leechs = new LinkedList<Leech>();
     }
-    // añade un nuevo leech
+    // anhade un nuevo leech
     public void newLeech(Leech l) {
         leechs.add(l);
     }
@@ -43,12 +43,12 @@ public class FileInfo implements Serializable {
     }
     // solo para depurar
     public void print() throws RemoteException {
-        System.out.println("\ttamaño de bloque: " + blockSize);
-        System.out.println("\tnúmero de bloques: " + numBlocks);
+        System.out.println("\ttamanho de bloque: " + blockSize);
+        System.out.println("\tnumero de bloques: " + numBlocks);
         System.out.println("\tSeed: " + seed.getName());
-	// llama a método remoto getName requiere RemoteException
+	// llama a metodo remoto getName requiere RemoteException
 	for (Leech leech : leechs)
-	    // llama a método remoto getName requiere RemoteException
+	    // llama a metodo remoto getName requiere RemoteException
             System.out.println("\tLeech: " + leech.getName());
     }
 }

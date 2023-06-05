@@ -2,7 +2,7 @@ name: Deploy to Server
 
 on:
   push:
-    branches: [ main, ft/alvaro ]
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -36,14 +36,14 @@ jobs:
           # Check if Kaska-SSDD directory exists
           if [ -d "Bitcascade-SSDD" ]; then
             # Kaska-SSDD directory exists, do a git pull
-            git config pull.rebase false
+            git config --global pull.rebase false
             cd Bitcascade-SSDD
-            git pull
-            cp -r DATSI/sd/BitCascade.2023 ..
+            git pull origin main
+            cp -r DATSI/SD/BitCascade.2023 ../DATSI/SD/
           else
             # Bitcascade-SSDD directory doesn't exist, do a git clone
             git clone https://{{secrets.TOKEN_GITHUB}}@github.com/alvarocaboUPM/Bitcascade-SSDD/
-            cp -r Bitcascade-SSDD/DATSI/sd/BitCascade.2023 .
+            cp -r Bitcascade-SSDD/DATSI/SD/BitCascade.2023 ./DATSI/SD/
           fi
 
     - name: Build proyect
@@ -65,4 +65,4 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: ${{ secrets.SERVER_PORT }}
         script: |
-          yes s | entrega.sd bitcascade.2023
+          yes s | entrega.sd BitCascade.2023

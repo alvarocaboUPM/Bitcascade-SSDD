@@ -12,9 +12,9 @@ public interface Tracker extends Remote {
     // se publica un fichero
     boolean announceFile (Seed publisher, String name, int blockSize, int numBlocks) throws RemoteException;
 
-    // obtiene acceso a la metainformación de un fichero
+    // obtiene acceso a la metainformacion de un fichero
     public FileInfo lookupFile(String name) throws RemoteException;
 
-    // se añade un nuevo leech
+    // se anhade un nuevo leech
     public boolean addLeech(Leech leech, String name) throws RemoteException;
 }

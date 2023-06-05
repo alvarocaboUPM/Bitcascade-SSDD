@@ -14,14 +14,14 @@ public class Downloader {
         }
         try {
             // crea subdirectorio en "bin" con el nombre del nodo
-            // donde se dejará la copia del fichero
+            // donde se dejara la copia del fichero
             new File(args[2]).mkdir();
 
             // Instancia la clase que implementa la interfaz Leech
             DownloaderImpl d = DownloaderImpl.init(args[0], Integer.parseInt(args[1]), args[2], args[3]);
 
-            // Imprime la información del fichero lo que permite verificar
-            // si ha funcionado el método lookupFile.
+            // Imprime la informacion del fichero lo que permite verificar
+            // si ha funcionado el metodo lookupFile.
             d.getFileInfo().print();
 
             // Bucle que descarga los bloques del fichero

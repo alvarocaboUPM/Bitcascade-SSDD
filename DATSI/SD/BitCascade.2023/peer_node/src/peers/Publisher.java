@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -35,7 +36,11 @@ public class Publisher extends UnicastRemoteObject implements Seed {
         numBlocks = (int) (new File(path).length() + blockSize - 1)/blockSize;
 
         // TODO 2: abrir el fichero para leer (RandomAccessFile)
-        raf = new RandomAccessFile(file, "r");
+        try {
+            raf = new RandomAccessFile(path, "r");
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichero en ruta '" + path +"' no encontrado");
+        }
     }
 
     public String getName() throws RemoteException {
@@ -46,9 +51,7 @@ public class Publisher extends UnicastRemoteObject implements Seed {
         byte [] buf = null;
         System.out.println("publisher read " + numBl);
 
-        // TODO 2: realiza lectura solicitada devolviendo lo leido en buf 
-	    // Cuidado con ultimo bloque que probablemente no estara completo
-        long fileSizeBytes = new File(file).length();
+        long fileSizeBytes = new File(path).length();
 	    // redondeo por exceso
         int fileSizeBlocks = (int)((fileSizeBytes + blockSize - 1)/blockSize);
 

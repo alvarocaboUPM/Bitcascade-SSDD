@@ -39,7 +39,6 @@ class TrackerSrv extends UnicastRemoteObject implements Tracker  {
     // se publica fichero: debe ser sincronizado para asegurar exclusion mutua;
     // devuelve falso si ya estaba publicado un fichero con el mismo nombre
     public synchronized boolean announceFile(Seed publisher, String fileName, int blockSize, int numBlocks) throws RemoteException {
-        // TODO 1: se crea un objeto FileInfo con la informacion del fichero y se inserta en el mapa
         if (!files.containsKey(fileName)) {
             files.put(fileName, new FileInfo(publisher, blockSize, numBlocks));
             return true;
@@ -48,12 +47,10 @@ class TrackerSrv extends UnicastRemoteObject implements Tracker  {
         return false;
     }
 
-    // TODO 1: obtiene acceso a la metainformacion de un fichero
     public synchronized FileInfo lookupFile(String fileName) throws RemoteException {
         return files.get(fileName);
     }
 
-    // TODO 3: se anhade un nuevo leech a ese fichero (tercera fase)
     public boolean addLeech(Leech leech, String fileName) throws RemoteException {
         return false;
     }

@@ -20,7 +20,7 @@ import interfaces.Tracker;
 public class Publisher extends UnicastRemoteObject implements Seed {
     public static final long serialVersionUID=1234567890L;
     String name; // nombre del nodo (solo para depurar)
-    String file;
+    String filename;
     String path; // convenio: path = name + "/" + file
     int blockSize;
     int numBlocks;
@@ -28,16 +28,16 @@ public class Publisher extends UnicastRemoteObject implements Seed {
 
     public Publisher(String n, String f, int bSize) throws RemoteException, IOException {
         name = n; // nombre del nodo (solo para depurar)
-        file = f; // nombre del fichero especificado
-        path = name + "/" + file; // convenio: directorio = nombre del nodo
+        filename = f; // nombre del fichero especificado
+        path = name + "/" + filename; // convenio: directorio = nombre del nodo
         blockSize = bSize; // tamanho de bloque especificado
 	    // Calculo del nº bloques redondeado por exceso:
 	    //     truco: ⌈x/y⌉ -> (x+y-1)/y
-        numBlocks = (int) (new File(path).length() + blockSize - 1)/blockSize;
+        File file=new File(path);
+        numBlocks = (int) (file.length() + blockSize - 1)/blockSize;
 
-        // TODO 2: abrir el fichero para leer (RandomAccessFile)
         try {
-            raf = new RandomAccessFile(path, "r");
+            raf = new RandomAccessFile(file, "r");
         } catch (FileNotFoundException e) {
             System.out.println("Fichero en ruta '" + path +"' no encontrado");
         }
@@ -71,7 +71,6 @@ public class Publisher extends UnicastRemoteObject implements Seed {
                 System.out.println("Bytes leidos = " + n);
                 System.out.write(buf);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 throw new RemoteException("Error interno", e);
             }

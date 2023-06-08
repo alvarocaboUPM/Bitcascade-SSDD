@@ -4,7 +4,6 @@
 // NO MODIFICAR
 
 package peers;
-import java.rmi.RemoteException;
 import java.io.File;
 public class Downloader {
     static public void main(String args[]) {

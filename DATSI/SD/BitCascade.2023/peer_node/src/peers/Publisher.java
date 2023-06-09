@@ -85,26 +85,27 @@ public class Publisher extends UnicastRemoteObject implements Seed {
     // Obtiene del registry una referencia al tracker y publica mediante
     // announceFile el fichero especificado creando una instancia de esta clase
     static public void main(String args[]) throws RemoteException {
-        if (args.length!=5) {
-            System.err.println("Usage: Publisher registryHost registryPort name file blockSize");
+        if (args.length != 5) {
+            System.err.println("Usage Publisher: registryHost registryPort name file blockSize");
             return;
         }
         if (System.getSecurityManager() == null)
             System.setSecurityManager(new SecurityManager());
 
         try {
-            // TODO 1: localiza el registry en el host y puerto indicado y obtiene la referencia remota al tracker asignandola a esta variable: 
-            //localiza el registry en la maquina y puerto especificados
+
             Registry registry = LocateRegistry.getRegistry(args[0], Integer.parseInt(args[1]));
-            // obtiene una referencia remota el servicio
             Tracker trck = (Tracker) registry.lookup("BitCascade");
 
             // comprobamos si ha obtenido bien la referencia:
             System.out.println("el nombre del nodo del tracker es: " + trck.getName());
+            String publisherName = args[2];
+            String filename = args[3];
+            int blockSize = Integer.parseInt(args[4]);
+            Publisher p = new Publisher(publisherName, filename, blockSize);
 
-            // TODO 1: crea un objeto de la clase Publisher y usa el metodo remoto announceFile del Tracker para publicar el fichero (nº bloques disponible en getNumBlocks de esa clase)
-            Publisher pub = new Publisher(args[2], args[3], Integer.parseInt(args[4]));
-            boolean res = trck.announceFile(pub, args[3], Integer.parseInt(args[4]), pub.getNumBlocks());
+            // asigna resultado de announceFile
+            boolean res = trck.announceFile(p, filename, blockSize, p.getNumBlocks());
 
             if (!res) { // comprueba resultado
                 // si false: ya existe fichero publicado con ese nombre
@@ -112,9 +113,8 @@ public class Publisher extends UnicastRemoteObject implements Seed {
                 System.exit(1);
             }
             System.err.println("Dando servicio...");
-            // no termina nunca (modo de operacion de UnicastRemoteObject)
-        }
-        catch (Exception e) {
+            // no termina nunca (modo de operación de UnicastRemoteObject)
+        } catch (Exception e) {
             System.err.println("Publisher exception:");
             e.printStackTrace();
             System.exit(1);
